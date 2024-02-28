@@ -23,6 +23,7 @@ import edu.co.udestdea.pruebasoft.web.app.models.entities.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	
 	boolean existsByEmailOrUsername(String correo,String username);
+	boolean existsByEmail(String correo);
 	
 	@Query("SELECT u FROM Usuario u WHERE u.username = :username OR u.email = :username")
 	Optional<Usuario> findByUsernameOrCorreo(String username);

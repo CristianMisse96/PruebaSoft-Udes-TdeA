@@ -8,17 +8,23 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.co.udestdea.pruebasoft.web.app.auth.service.JWTService;
 import edu.co.udestdea.pruebasoft.web.app.config.SimpleGrantedAuthorityMixin;
+import edu.co.udestdea.pruebasoft.web.app.models.dto.UsuarioDTO;
+import edu.co.udestdea.pruebasoft.web.app.models.entities.Usuario;
+import edu.co.udestdea.pruebasoft.web.app.repositories.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -26,6 +32,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class JWTServiceImpl implements JWTService {
+	
+	private UsuarioRepository repository;
+	private ModelMapper modelMapper;
+	
+	public JWTServiceImpl(UsuarioRepository repository, ModelMapper modelMapper) {
+		this.repository=repository;
+		this.modelMapper= modelMapper;
+	}
 
 	@Override
 	public String create(Authentication auth) throws IOException {
@@ -95,6 +109,13 @@ public class JWTServiceImpl implements JWTService {
 		 }
 		 
 		 return token.substring(PREFIX_TOKEN.length());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public UsuarioDTO findUser(String username) {
+		Optional<Usuario> user= repository.findByUsernameOrCorreo(username);
+		return modelMapper.map(user.orElseThrow(), UsuarioDTO.class);
 	}
 
 }

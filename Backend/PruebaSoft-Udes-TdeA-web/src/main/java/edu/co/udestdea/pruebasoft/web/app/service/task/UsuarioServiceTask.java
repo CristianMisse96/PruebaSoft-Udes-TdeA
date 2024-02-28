@@ -24,4 +24,6 @@ public interface UsuarioServiceTask {
 	 * @return dto con la informacion persistida
 	 */
 	ResponseEntity<RespuestaServicioDTO<UsuarioDTO>> registarUsuario(UsuarioDTO userDTO);
+
+	ResponseEntity<RespuestaServicioDTO<Boolean>> existeCorreo(String email);
 }

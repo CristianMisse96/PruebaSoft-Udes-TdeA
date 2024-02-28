@@ -42,6 +42,8 @@ public class UsuarioDTO implements Serializable{
 	
 	private List<RoleDTO> roles;
 	
+	private String foto;
+	
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private boolean admin;
 	@JsonProperty(access = Access.WRITE_ONLY)

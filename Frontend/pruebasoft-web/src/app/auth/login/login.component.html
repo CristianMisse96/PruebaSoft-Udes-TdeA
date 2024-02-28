@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <div class="row mt-1">
+    <div class="col-8">
+    
+    </div>
+
+    <div class="col-4">
+    <div class="card border-primary text-center">
+        <div class="card-header">Iniciar sesión</div>
+    </div>
+
+    <div class="card-body mt-2 ">
+        <form  id="loginform"
+               autocomplete="off"
+               [formGroup]="loginForm"
+               (ngSubmit)="login()">
+
+        <!--###Username/correo-->
+        <div class="input-group mt-3">
+            <label class="col-sm-2 col-form-label">Username <small class="text-danger">*</small></label>&nbsp; &nbsp;
+            <div class="col">
+              <input class="form-control"
+                     type="text"
+                     placeholder="Ingrese su username o correo"
+                     formControlName="username"
+                     [class.is-invalid]="isValido('username')">
+              <small *ngIf="isValido('username')" class="text-danger">Campo obligatorio</small>
+            </div>
+          </div>
+         <!--###Contraseña###-->   
+         <div class="input-group mt-3">
+            <label class="col-sm-2 col-form-label">Contraseña <small class="text-danger">*</small></label>&nbsp; &nbsp;
+            <div class="col" style="position: relative;">
+                
+              <input class="form-control"
+                     [type]="hide ? 'password' : 'text'"
+                     placeholder="Contraseña"
+                     formControlName="password"
+                     [class.is-invalid]="isValido('password')">
+
+              <app-toogle-password *ngIf="!isValido('password')" [hide]="hide" (toggleVisibility)="ocultarPass()"></app-toogle-password>
+              <small *ngIf="isValido('password')" class="text-danger">Campo obligatorio</small>
+            </div>
+            
+          </div>
+
+          <!--###Remember###-->
+          <div class="form-group row mt-3">
+            <div class="col-md-12">
+                <div class="checkbox checkbox-primary d-grid gap-2 d-md-flex"> &nbsp;&nbsp;&nbsp;
+                  <div class="col-4 text-end">
+                    <input id="checkbox-signup" 
+                           type="checkbox"
+                           formControlName="remember" 
+                           class="filled-in chk-col-light-blue">
+                    <label for="checkbox-signup"> Recordar me </label>
+                  </div>
+
+                  <div class="col text-end me-1">
+                    <a href="javascript:void(0)" id="to-recover" class="text-dark"><i class="fa fa-lock m-r-5"></i> Olvidaste la contraseña?</a>
+                  </div> 
+                </div>
+            </div>
+        </div>
+          <!--###Subtmit-->
+          <div class="input-group mt-3">
+            <div class="d-grid col mx-0">
+              <button type="submit" class="btn btn-primary btn-rounded" [disabled]="loginForm.invalid">
+                Iniciar sesión
+              </button>
+            </div>
+          </div>
+
+          <!--###Don't have accont-->
+          <div class="form-group m-b-0">
+            <div class="col-sm-12 text-center">
+                Don't have an account? <a routerLink="/register" class="text-primary m-l-5"><b>Sign Up</b></a>
+            </div>
+        </div>
+
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+<app-footer></app-footer>

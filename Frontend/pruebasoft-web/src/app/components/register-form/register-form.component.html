@@ -1,0 +1,145 @@
+<h4>Formulario <small> Registro </small></h4>
+<hr>
+
+  <div class="container">
+      <form autocomplete="off" [formGroup]="registerForm" (ngSubmit)="crearUsuario()">
+        <!--===NOMBRE===-->
+        <div class="mb-0 col-sm-6">
+            <label class="col-2 col-form-label">Nombre<small class="text-danger">*</small></label>
+            <div class="col">
+      
+              <input class="form-control form-control-sm"
+                     type="text"
+                     placeholder="Ingrese su nombre"
+                     formControlName="name"
+                     [class.is-invalid]="isValido('name')">
+      
+              <small *ngIf="isValido('name') && !maxLength('name')" class="text-danger">Campo obligatorio</small>
+              <small *ngIf="isValido('name') && maxLength('name')" class="text-danger">El campo nombre no puede tener más de 45 caracteres.</small>
+            </div>
+          </div>
+
+          <!--===APELLIDO===-->
+          <div class="mb-0 col-sm-6">
+            <label class="col-2 col-form-label">Apellido<small class="text-danger">*</small></label>
+            <div class="col">
+      
+              <input class="form-control form-control-sm"
+                     type="text"
+                     placeholder="Ingrese su apellido"
+                     formControlName="apellido"
+                     [class.is-invalid]="isValido('apellido')">
+      
+              <small *ngIf="isValido('apellido') && !maxLength('apellido')" class="text-danger">Campo obligatorio</small>
+              <small *ngIf="isValido('apellido') && maxLength('apellido')" class="text-danger">El campo apellido no puede tener más de 45 caracteres.</small>
+            </div>
+          </div>
+
+          <!--===USERNAME===-->
+          <div class="mb-0 col-sm-6">
+            <label class="col-3 col-form-label">Nombre de usuario<small class="text-danger">*</small></label>
+            <div class="col">
+      
+              <input class="form-control form-control-sm"
+                     type="text"
+                     placeholder="Ingrese username"
+                     formControlName="username"
+                     [class.is-invalid]="isValido('username')">
+      
+              <small *ngIf="isValido('username') && !maxLength('username') && !isUsername('username')" class="text-danger">Campo obligatorio</small>
+              <small *ngIf="isValido('username') && maxLength('username')" class="text-danger">El campo username no puede tener más de 30 caracteres.</small>
+              <small *ngIf="isValido('username') && isUsername('username')" class="text-danger">El nombre de usuario ya se encuentra en uso.</small>
+            </div>
+          </div>
+
+          <!--===EMAIL===-->
+          <div class="mb-0 col-sm-6">
+            <label class="col-3 col-form-label">Correo eléctronico<small class="text-danger">*</small></label>
+            <div class="col">
+      
+              <input class="form-control form-control-sm"
+                     type="email"
+                     placeholder="Ingrese su correo"
+                     formControlName="email"
+                     [class.is-invalid]="isValido('email')">
+      
+              <small *ngIf="isValido('email') && !maxLength('email') && !pattern('email') && !isEmail('email')" class="text-danger">Campo obligatorio</small>
+              <small *ngIf="isValido('email') && maxLength('email')" class="text-danger">El campo email no puede tener más de 254 caracteres.</small>
+              <small *ngIf="isValido('email') && pattern('email')" class="text-danger">El campo email debe cumplir con el formato xxxx@xxxx.xxxx</small>
+              <small *ngIf="isValido('email') && isEmail('email')" class="text-danger">El correo electrónico ya se encuentra en uso.</small>
+            </div>
+          </div>
+
+          <!--===PASSWORD===-->
+          <div class="mb-0 col-sm-6">
+            <label class="col-2 col-form-label">Contraseña<small class="text-danger">*</small></label>
+            <div class="col" style="position: relative;">
+      
+              <input class="form-control form-control-sm"
+                     [type]="hide ? 'password' : 'text'"
+                     placeholder="Ingrese su contraseña"
+                     formControlName="password"
+                     [class.is-invalid]="isValido('password') || maxLength('password')&& !isPasswordsIguales('password2')"
+                     [class.my-custom-invalid]="!isValido('password') && !maxLength('password') && isPasswordsIguales('password2')">
+           
+              <app-toogle-password *ngIf="!isValido('password')" [hide]="hide" (toggleVisibility)="hide = !this.hide"></app-toogle-password>
+            </div>
+
+            <small *ngIf="isValido('password') && !maxLength('password')" class="text-danger">Campo obligatorio</small>
+            <small *ngIf="isValido('password') && maxLength('password')" class="text-danger">El campo Contraseña no puede tener más de 15 caracteres.</small>
+            <small *ngIf="!isValido('password') && isPasswordsIguales('password2')" class="text-danger">Las contraseñas deben coincidir.</small>
+          </div>
+
+          <!--===REPETIR PASSWORD===-->
+          <div class="mb-2 col-sm-6">
+            <label class="col-3 col-form-label">Confirmar contraseña<small class="text-danger">*</small></label>
+            <div class="col" style="position: relative;">
+      
+              <input class="form-control form-control-sm"
+                     [type]="hide2 ? 'password' : 'text'"
+                     placeholder="Confirme su contraseña"
+                     formControlName="password2"
+                     [class.my-custom-invalid]="isPasswordsIguales('password2')"
+                     >
+           
+            <app-toogle-password *ngIf="!isPasswordsIguales('password2') || !isValido('password')" [hide]="hide2" (toggleVisibility)="hide2 = !this.hide2"></app-toogle-password>
+            </div>
+            <small *ngIf="isPasswordsIguales('password2')" class="text-danger">Las contraseñas deben coincidir.</small>
+            
+          </div>
+
+          <!--===ASIGNAR ROLES===-->
+          <div class="mb-2 col-sm-6" *ngIf="!authService.hasRole(rolAdmin)">
+            <label class="col-8 col-form-label">Roles<small class="text-danger"> (si no selecciona un rol por defecto se asignara ESTUDIANTE)</small></label>
+            <div class="col">
+      
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="student" formControlName="student">
+                <label class="form-check-label" for="student">ESTUDIANTE</label>
+              </div>
+              <div class="form-check form-check-inline ms-3">
+                <input class="form-check-input" type="checkbox" id="teacher" formControlName="teacher">
+                <label class="form-check-label" for="teacher">DOCENTE</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="admin" formControlName="admin">
+                <label class="form-check-label" for="admin">ADMINISTRADOR</label>
+              </div>
+      
+            </div>
+          </div>
+
+          <!--===BOTÓN SUBMIT===-->
+          <div class="col-sm-6">
+           
+            <div class="text-end">
+             
+              <button type="submit"  class="btn btn-success btn-lg">
+                <i class="fa fa-save me-1"></i>
+                Guardar
+              </button>
+            </div>
+          </div>
+  </form>
+</div>
+

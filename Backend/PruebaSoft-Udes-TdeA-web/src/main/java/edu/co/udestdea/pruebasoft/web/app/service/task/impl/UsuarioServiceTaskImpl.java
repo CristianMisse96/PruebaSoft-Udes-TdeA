@@ -65,7 +65,7 @@ public class UsuarioServiceTaskImpl implements UsuarioServiceTask {
 				respuestaServicioUserDTO.setMensajeDTO(new MensajeDTO(SeverityEnum.ERROR, messages.getKey(KEY_ERROR_LABEL),messages.getKey(e.getMessage())));
 				return new ResponseEntity<>(respuestaServicioUserDTO, HttpStatus.CONFLICT);
 			}else {
-			    log.error("error inesperado -> " + e.getMessage(), e);
+			    log.error("error inesperado registrar usuario -> " + e.getMessage());
 				respuestaServicioUserDTO.setMensajeDTO(new MensajeDTO(SeverityEnum.ERROR, messages.getKey(KEY_ERROR_LABEL), messages.getKey(KEY_ERROR_GENERICO).replace("{1}", uuid)));
 				return new ResponseEntity<>(respuestaServicioUserDTO, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -73,6 +73,27 @@ public class UsuarioServiceTaskImpl implements UsuarioServiceTask {
 		}
 		
 		return new ResponseEntity<>(respuestaServicioUserDTO, HttpStatus.CREATED);
+	}
+
+	@Override
+	public ResponseEntity<RespuestaServicioDTO<Boolean>> existeCorreo(String email) {
+		
+		RespuestaServicioDTO<Boolean> respuestaServicioDTO = new RespuestaServicioDTO<>();
+		String uuid = UUID.randomUUID().toString();
+		
+		Boolean validacionCorreo= false;
+		try {
+			validacionCorreo = userService.validarCorreo(email);
+			respuestaServicioDTO.setMensajeDTO(new MensajeDTO(SeverityEnum.SUCCESS, messages.getKey(KEY_SUCCESS), messages.getKey("success.detalle")));
+			respuestaServicioDTO.setOk(validacionCorreo);
+			respuestaServicioDTO.setNegocio(validacionCorreo);
+		}catch(Exception e) {
+			log.error("error inesperado registrar usuario -> " + e.getMessage());
+			respuestaServicioDTO.setMensajeDTO(new MensajeDTO(SeverityEnum.ERROR, messages.getKey(KEY_ERROR_LABEL), messages.getKey(KEY_ERROR_GENERICO).replace("{1}", uuid)));
+			respuestaServicioDTO.setNegocio(validacionCorreo);
+			return new ResponseEntity<>(respuestaServicioDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(respuestaServicioDTO, HttpStatus.OK);
 	}
 
 }

@@ -62,6 +62,12 @@ public class UsuarioServiceImpl implements UsuarioService{
 		
 		return modelMapper.map(userRepository.save(user), UsuarioDTO.class);
 	}
+
+	@Override
+	public Boolean validarCorreo(String email) throws Exception {
+		
+		return userRepository.existsByEmail(email);
+	}
 	
 
 }

@@ -2,8 +2,11 @@ package edu.co.udestdea.pruebasoft.web.app.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,5 +74,22 @@ public class UsuarioRestController {
 		
 		userDTO.setStudent(true);
 		return newUserAdmin(userDTO, result);
+	}
+	
+	@GetMapping(value = "/isemail/{email}")
+	public ResponseEntity<RespuestaServicioDTO<Boolean>> existeCorreo(@PathVariable String email){
+		
+		if (!StringUtils.hasText(email)) {
+			RespuestaServicioDTO<Boolean> respuestaServicioDTO = new RespuestaServicioDTO<>();
+			
+			respuestaServicioDTO.setMensajeDTO(
+					new MensajeDTO(SeverityEnum.ERROR, 
+							messages.getKey(SeverityEnum.ERROR.getKey()),messages.getKey(KEY_ERROR_GENERICO)));
+			
+			respuestaServicioDTO.setOk(false);
+			respuestaServicioDTO.setNegocio(false);
+			return new ResponseEntity<>(respuestaServicioDTO, HttpStatus.BAD_REQUEST);
+		}
+		return userServiceTask.existeCorreo(email);
 	}
 }

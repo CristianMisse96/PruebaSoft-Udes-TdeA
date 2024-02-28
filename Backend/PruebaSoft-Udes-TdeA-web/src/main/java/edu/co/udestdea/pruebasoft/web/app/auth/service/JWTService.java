@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import edu.co.udestdea.pruebasoft.web.app.models.dto.UsuarioDTO;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -25,4 +26,6 @@ public interface JWTService {
 	Collection<? extends GrantedAuthority> getRoles(String token) throws  IOException ;
 	
 	public String resolve(String token);
+	
+	UsuarioDTO findUser(String username);
 }

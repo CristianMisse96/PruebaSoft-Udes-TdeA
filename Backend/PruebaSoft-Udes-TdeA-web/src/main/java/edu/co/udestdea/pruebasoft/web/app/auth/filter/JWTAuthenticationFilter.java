@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.co.udestdea.pruebasoft.web.app.auth.service.JWTService;
 import edu.co.udestdea.pruebasoft.web.app.models.entities.Usuario;
+import edu.co.udestdea.pruebasoft.web.app.service.entity.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -84,9 +86,9 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String token = jWTService.create(authResult);
 		
 		response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
-		Map<String, String> body= new HashMap<>();
+		Map<String, Object> body= new HashMap<>();
 		body.put("token", token);
-		body.put("username", authResult.getName());
+		body.put("usuario", jWTService.findUser(authResult.getName()));
 		body.put(MESSAGE, String.format("Bienvenido %s, ha iniciado sesión con éxito!", authResult.getName()));
 		
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
@@ -100,7 +102,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			AuthenticationException failed) throws IOException, ServletException {
 		
 		Map<String, String> body= new HashMap<>();
-		body.put(MESSAGE,"Error username o password incorrectos");
+		body.put(MESSAGE,"username/correo o password incorrectos");
 		body.put("error", failed.getMessage());
 		
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
