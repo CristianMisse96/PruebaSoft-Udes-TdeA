@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +20,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.co.udestdea.pruebasoft.web.app.auth.service.JWTService;
+import edu.co.udestdea.pruebasoft.web.app.models.dto.UsuarioDTO;
 import edu.co.udestdea.pruebasoft.web.app.models.entities.Usuario;
-import edu.co.udestdea.pruebasoft.web.app.service.entity.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -83,12 +82,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		String token = jWTService.create(authResult);
+		UsuarioDTO usuarioDTO=  jWTService.findUser(authResult.getName());
+		String token = jWTService.create(authResult,usuarioDTO);
 		
 		response.addHeader(HEADER_AUTHORIZATION, PREFIX_TOKEN + token);
 		Map<String, Object> body= new HashMap<>();
 		body.put("token", token);
-		body.put("usuario", jWTService.findUser(authResult.getName()));
+		body.put("usuario", usuarioDTO);
 		body.put(MESSAGE, String.format("Bienvenido %s, ha iniciado sesión con éxito!", authResult.getName()));
 		
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));

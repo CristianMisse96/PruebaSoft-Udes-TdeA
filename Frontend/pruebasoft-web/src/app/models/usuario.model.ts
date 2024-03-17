@@ -6,11 +6,11 @@ export class Usuario{
         public username:string,
         public nombre: string,
         public apellido: string,
-        public email: string,
-        public roles: RolEnum[],
-        public password?: string,
         public img?: string,
         public id?: number,
+        public email?: string,
+        public roles?: RolEnum[],
+        public password?: string,
         ) {}
 
 }

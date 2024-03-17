@@ -13,6 +13,8 @@ public interface UsuarioService {
 	 */
 	UsuarioDTO registrarUsuario(UsuarioDTO userDTO) throws PruebaSoftException;
 	
-	Boolean validarCorreo(String email) throws Exception;
+	Boolean validarCorreo(String email) throws PruebaSoftException;
+
+	Boolean validarUsername(String username) throws PruebaSoftException;
 
 }

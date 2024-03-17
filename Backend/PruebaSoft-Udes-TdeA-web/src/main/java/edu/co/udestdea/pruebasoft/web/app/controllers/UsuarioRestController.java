@@ -92,4 +92,21 @@ public class UsuarioRestController {
 		}
 		return userServiceTask.existeCorreo(email);
 	}
+	
+	@GetMapping(value = "/isusername/{username}")
+	public ResponseEntity<RespuestaServicioDTO<Boolean>> existeUsername(@PathVariable String username){
+		
+		if (!StringUtils.hasText(username)) {
+			RespuestaServicioDTO<Boolean> respuestaServicioDTO = new RespuestaServicioDTO<>();
+			
+			respuestaServicioDTO.setMensajeDTO(
+					new MensajeDTO(SeverityEnum.ERROR, 
+							messages.getKey(SeverityEnum.ERROR.getKey()),messages.getKey(KEY_ERROR_GENERICO)));
+			
+			respuestaServicioDTO.setOk(false);
+			respuestaServicioDTO.setNegocio(false);
+			return new ResponseEntity<>(respuestaServicioDTO, HttpStatus.BAD_REQUEST);
+		}
+		return userServiceTask.existeUsername(username);
+	}
 }

@@ -40,6 +40,7 @@ public class UsuarioDTO implements Serializable{
 	@Size(max = 45)
 	private String apellido;
 	
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private List<RoleDTO> roles;
 	
 	private String foto;

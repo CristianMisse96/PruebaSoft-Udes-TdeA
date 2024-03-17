@@ -34,15 +34,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JWTServiceImpl implements JWTService {
 	
 	private UsuarioRepository repository;
-	private ModelMapper modelMapper;
 	
-	public JWTServiceImpl(UsuarioRepository repository, ModelMapper modelMapper) {
+	public JWTServiceImpl(UsuarioRepository repository) {
 		this.repository=repository;
-		this.modelMapper= modelMapper;
 	}
 
 	@Override
-	public String create(Authentication auth) throws IOException {
+	public String create(Authentication auth, UsuarioDTO userDTO) throws IOException {
 		
 		User user= (User) auth.getPrincipal();
 		
@@ -53,6 +51,7 @@ public class JWTServiceImpl implements JWTService {
 		Claims claims = Jwts.claims()
 				.add("authorities", new ObjectMapper().writeValueAsString(roles))
 				.add("username", username)
+				.add("id",userDTO.getId())
 				.build();
 		
 		return Jwts.builder()
@@ -110,12 +109,21 @@ public class JWTServiceImpl implements JWTService {
 		 
 		 return token.substring(PREFIX_TOKEN.length());
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public UsuarioDTO findUser(String username) {
 		Optional<Usuario> user= repository.findByUsernameOrCorreo(username);
-		return modelMapper.map(user.orElseThrow(), UsuarioDTO.class);
+		
+		UsuarioDTO dto= new UsuarioDTO();
+		user.ifPresent(u-> {
+				dto.setId(u.getId());
+				dto.setNombre(u.getNombre());
+				dto.setApellido(u.getApellido());
+				dto.setFoto(u.getFoto());
+			});
+		
+		return dto;
 	}
 
 }

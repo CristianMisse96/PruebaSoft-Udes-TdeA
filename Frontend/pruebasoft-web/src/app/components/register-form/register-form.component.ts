@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormControlOptions, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -6,6 +6,9 @@ import { RolEnum } from 'src/app/models/enums/RolEnum';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { ValidadoresService } from 'src/app/services/validadores.service';
+import { environment } from 'src/environments/environment.development';
+
+const duration= environment.toast_duration;
 
 @Component({
   selector: 'app-register-form',
@@ -20,14 +23,14 @@ import { ValidadoresService } from 'src/app/services/validadores.service';
   `
   ]
 })
-export class RegisterFormComponent{
+export class RegisterFormComponent implements OnInit{
 
   hide: boolean = true;
   hide2: boolean = true;
   registerForm: FormGroup;
   rolAdmin: RolEnum= RolEnum.ROLE_ADMIN;
   @Output() salida : EventEmitter<any>= new EventEmitter<any>();
-  @Input() modoEditar: boolean = false;
+  @Input() modoEditar: boolean;
   @Input() usuario: Usuario | undefined; // Nuevo Input para recibir el usuario
 
   constructor(private fb: FormBuilder,
@@ -36,7 +39,25 @@ export class RegisterFormComponent{
               private validadores: ValidadoresService,
               private toast: ToastrService) {
 
+   
+  }
+  ngOnInit(): void {
     this.crearFormulario();
+    this.cargarDataAlFormulario();
+  }
+
+  cargarDataAlFormulario() {
+    if(this.modoEditar && this.usuario){
+      this.registerForm.patchValue({
+        name: this.usuario.nombre,
+        apellido: this.usuario.apellido,
+        email: this.usuario.email,
+        password: this.usuario.password,
+        student: this.usuario.roles.includes(RolEnum.ROLE_STUDENT),
+        teacher: this.usuario.roles.includes(RolEnum.ROLE_TEACHER),
+        admin: this.usuario.roles.includes(RolEnum.ROLE_ADMIN),
+      });
+    }
   }
  
   crearFormulario() {
@@ -130,11 +151,42 @@ export class RegisterFormComponent{
 
   /**=== POSTEO DE LA INFORMACIÓN === */
   crearUsuario() {
-    // todo guardar información
-    this.salida.emit(this.toast.success(` has iniciado sesión con éxito`,
-    'Login!!!', { timeOut: 5000}));
-    this.router.navigateByUrl('/')
-    console.log(this.registerForm);
+    
+    
+    if(this.registerForm.invalid || this.registerForm.pending){
+        return Object.values(this.registerForm.controls).forEach(control=> {
+        control.markAllAsTouched();
+      });
+    }
+   // guardar información según modo y rol
+    if(!this.modoEditar && !this.authService.hasRole(this.rolAdmin)){
+      this.registrarUsuario();
+      
+    }else if (!this.modoEditar && this.authService.hasRole(this.rolAdmin)){
+      this.crearUsuarioAdmin();
+    }
+    
   }
 
+  crearUsuarioAdmin() {
+    this.authService.create(this.registerForm.value).subscribe({
+      next: (resp:any)=>{
+        this.toast.success(resp.mensaje.detail,resp.mensaje.summary,{timeOut:duration});
+        this.router.navigateByUrl('/dashboard/users/create');
+      }
+    });
+    this.registerForm.reset();
+  }
+
+  registrarUsuario() {
+    this.authService.register(this.registerForm.value).subscribe({
+      next: (resp:any)=>{
+        const mensaje= resp.mensaje.detail + ' Por favor inicie sesión con sus credenciales.';
+        this.toast.success(mensaje,resp.mensaje.summary,{timeOut:duration});
+        this.router.navigateByUrl('/login');
+      }
+    });
+  }
+
+ 
 }

@@ -44,7 +44,8 @@
                      type="text"
                      placeholder="Ingrese username"
                      formControlName="username"
-                     [class.is-invalid]="isValido('username')">
+                     [class.is-invalid]="isValido('username')"
+                     [readOnly]="modoEditar">
       
               <small *ngIf="isValido('username') && !maxLength('username') && !isUsername('username')" class="text-danger">Campo obligatorio</small>
               <small *ngIf="isValido('username') && maxLength('username')" class="text-danger">El campo username no puede tener más de 30 caracteres.</small>
@@ -109,7 +110,7 @@
           </div>
 
           <!--===ASIGNAR ROLES===-->
-          <div class="mb-2 col-sm-6" *ngIf="!authService.hasRole(rolAdmin)">
+          <div class="mb-2 col-sm-6" *ngIf="authService.hasRole(rolAdmin)">
             <label class="col-8 col-form-label">Roles<small class="text-danger"> (si no selecciona un rol por defecto se asignara ESTUDIANTE)</small></label>
             <div class="col">
       

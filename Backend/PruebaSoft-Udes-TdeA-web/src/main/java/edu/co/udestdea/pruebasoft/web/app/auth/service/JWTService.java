@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public interface JWTService {
 	
-	public String create(Authentication auth) throws IOException ;
+	public String create(Authentication auth,UsuarioDTO userDTO) throws IOException ;
 	
 	public boolean validate(String token, HttpServletResponse response) throws JsonProcessingException, IOException;
 	
@@ -27,5 +27,6 @@ public interface JWTService {
 	
 	public String resolve(String token);
 	
-	UsuarioDTO findUser(String username);
+	public UsuarioDTO findUser(String username);
+	
 }

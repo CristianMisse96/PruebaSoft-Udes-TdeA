@@ -1,0 +1,67 @@
+.profile-pic {
+    width: 30px;
+    border-radius: 100%; 
+  }
+
+  ul.dropdown-user li .dw-user-box {
+    padding: 10px 15px; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-img {
+    width: 70px;
+    display: inline-block;
+    vertical-align: top; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-img img {
+    width: 100%;
+    border-radius: 5px; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-text {
+    display: inline-block;
+    padding-left: 10px; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-text h4 {
+    margin: 0px;
+    font-size: 15px; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-text p {
+    margin-bottom: 2px;
+    font-size: 12px; 
+  }
+
+  ul.dropdown-user li .dw-user-box .u-text .btn {
+    color: #ffffff;
+    padding: 5px 10px;
+    display: inline-block; 
+  }
+
+  li .dw-user-box .u-text .btn:hover {
+      background: #e6294b; 
+  }
+
+  ul.dropdown-user {
+    padding: 0px;
+    min-width: 270px; 
+  }
+
+  ul.dropdown-user li {
+    list-style: none;
+    padding: 0px;
+    margin: 0px; 
+  }
+
+  ul.dropdown-user li a {
+    padding: 9px 15px;
+    display: block;
+    color: #67757c; 
+  }
+
+  ul.dropdown-user li a:hover {
+      background: #e9edf2;
+      color: #398bf7;
+      text-decoration: none; 
+  }

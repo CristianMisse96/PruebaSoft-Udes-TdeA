@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.co.udestdea.pruebasoft.web.app.exception.PruebaSoftException;
-import edu.co.udestdea.pruebasoft.web.app.models.dto.RoleDTO;
 import edu.co.udestdea.pruebasoft.web.app.models.dto.UsuarioDTO;
 import edu.co.udestdea.pruebasoft.web.app.models.entities.Role;
 import edu.co.udestdea.pruebasoft.web.app.models.entities.Usuario;
@@ -20,6 +19,7 @@ import edu.co.udestdea.pruebasoft.web.app.service.entity.UsuarioService;
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
 	
+	private static final String ERROR_USUARIO_REGISTRAR_EXISTE = "error.usuario.registrar.existe";
 	private UsuarioRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private ModelMapper modelMapper;
@@ -37,7 +37,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 	@Transactional
 	public UsuarioDTO registrarUsuario(UsuarioDTO userDTO) throws PruebaSoftException{
 		if(userRepository.existsByEmailOrUsername(userDTO.getEmail(), userDTO.getUsername())) {
-				throw new PruebaSoftException("errorrr");
+				throw new PruebaSoftException(ERROR_USUARIO_REGISTRAR_EXISTE);
 		}
 		
 		Usuario user= modelMapper.map(userDTO, Usuario.class);
@@ -64,9 +64,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public Boolean validarCorreo(String email) throws Exception {
+	public Boolean validarCorreo(String email) throws PruebaSoftException {
 		
 		return userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public Boolean validarUsername(String username) throws PruebaSoftException {
+		return userRepository.existsByUsername(username);
 	}
 	
 

@@ -14,6 +14,10 @@ const duration = environment.toast_duration;
 export class LoginComponent implements OnInit{
 
   hide: boolean = true;
+  readonly MENSAJE_SIN_CONEXION =
+            'No se ha podido establecer una conexión con el servidor, por favor intente mas tarde.';
+  
+  readonly TITULO_SIN_CONEXION = '¡Sin conexión!';
 
   loginForm: FormGroup = this.fb.group({
     username: [localStorage.getItem('email') || '', [Validators.required]],
@@ -39,26 +43,35 @@ export class LoginComponent implements OnInit{
 
 
   login() {
+    //validar campos
+    if(this.loginForm.invalid){
+        return Object.values(this.loginForm.controls).forEach(control=> {
+        control.markAllAsTouched();
+      });
+    }
+    //realizar login
     this.authService.login(this.loginForm.value)
       .subscribe({
         next: (resp) => {
           if (this.loginForm.get('remember').value) {
-            localStorage.setItem('email', this.loginForm.get('email').value);
+            localStorage.setItem('email', this.loginForm.get('username').value);
           } else {
             localStorage.removeItem('email');
           }
 
           this.router.navigateByUrl('/');
-          this.toast.success(`${this.authService.usuario.username}, has iniciado sesión con éxito`,
+          this.toast.success(`${this.authService._usuario.username}, has iniciado sesión con éxito`,
             'Login!!!', { timeOut: duration });
             
         },
         error: (err) => {
           if (err.error.error === 'Bad credentials') {
             this.toast.error(err.error.message, 'Error', { timeOut: duration });
+          }else if(err.status ===0){
+              this.toast.error(this.MENSAJE_SIN_CONEXION, this.TITULO_SIN_CONEXION, { timeOut: duration });
+          }else{
+            this.toast.warning(err.error.error, 'Alerta!!!', { timeOut: duration });
           }
-
-          this.toast.warning(err.error.error, 'Alerta!!!', { timeOut: duration });
         },
       })
 

@@ -26,4 +26,6 @@ public interface UsuarioServiceTask {
 	ResponseEntity<RespuestaServicioDTO<UsuarioDTO>> registarUsuario(UsuarioDTO userDTO);
 
 	ResponseEntity<RespuestaServicioDTO<Boolean>> existeCorreo(String email);
+
+	ResponseEntity<RespuestaServicioDTO<Boolean>> existeUsername(String username);
 }

@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TooglePasswordComponent } from './toogle-password/toogle-password.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthModule } from '../auth/auth.module';
 
 
 
@@ -15,7 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   exports: [
     TooglePasswordComponent,

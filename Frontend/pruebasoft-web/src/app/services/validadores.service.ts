@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {FormControl} from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import {FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 
 const base_url= environment.base_url;

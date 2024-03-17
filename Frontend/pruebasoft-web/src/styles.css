@@ -21,3 +21,14 @@ html {
     width: 100%;
     height: 60px; /* Altura del pie de página */
   }
+
+
+  .text-muted {
+    color: #99abb4 !important; 
+  }
+
+  .cursor{
+    cursor: pointer;
+  }
+
+  

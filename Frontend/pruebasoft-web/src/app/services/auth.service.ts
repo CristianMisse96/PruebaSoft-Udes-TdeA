@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { LoginForm } from '../interfaces/login-form-interface';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { catchError, tap } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
 import { RolEnum } from '../models/enums/RolEnum';
+import { RegisterForm } from '../interfaces/register-form-interface';
+import { MessagesService } from './messages.service';
 
 const base_url = environment.base_url;
 
@@ -14,23 +16,25 @@ const base_url = environment.base_url;
 export class AuthService {
 
   usuario: Usuario;
-  private _token: string;
-  constructor(private http: HttpClient) { }
+ 
+  constructor(private http: HttpClient,
+              private messages : MessagesService) { }
 
   public get _usuario(){
 
     if(this.usuario!=null){
       return this.usuario
-    }else if(this.usuario==null && localStorage.getItem('user')!=null){
-      this.usuario= JSON.parse(localStorage.getItem('user')) as Usuario;
+    }else if(this.usuario==null && this.obtenerDatosToken(this.token)!=null){
+      let payload= this.obtenerDatosToken(this.token);
+      this.usuario= new Usuario(payload.username,payload.nombre,payload.apellido,payload.foto,payload.id,payload.email,payload.authorities);
       return this.usuario;
     }
 
-    return new Usuario('','','','',[],'','');
+    return new Usuario('','','');
   }
 
   get token() {
-    return localStorage.getItem('token');
+    return localStorage.getItem('tokenPruebaSoft');
   }
 
 
@@ -59,28 +63,68 @@ export class AuthService {
     return this.http.post(`${base_url}/login`, credentialsWithoutRemember)
       .pipe(
         tap((resp: any) => {
-
-          const{username,nombre,apellido,email,roles,foto,id}= resp.usuario;
-
-          this.usuario= new Usuario(username,nombre,apellido,email,roles,'',foto,id);
-
-          this.guardarLocalStorage(resp.token, this.usuario);
+          const {nombre,apellido,foto}= resp.usuario;
+          const user= new Usuario(null,nombre,apellido,foto);
+          this.guardarLocalStorage(resp.token, user);
 
         })
       );
   }
 
   guardarLocalStorage(token:string, usuario: Usuario){
-
-    const {password,email,...user}= usuario
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('tokenPruebaSoft', token);
+    localStorage.setItem('userPruebasoft',JSON.stringify(usuario));
   }
 
   hasRole(role : RolEnum) : boolean{
-    if(this._usuario.roles.includes(role)){
-      return true;
+    
+    return this._usuario.roles?.includes(role) || false;
+
+  }
+
+  logout(){
+    this.usuario=null;
+    localStorage.removeItem('tokenPruebaSoft');
+    localStorage.removeItem('userPruebaSoft');
+  }
+
+  register(formData: RegisterForm) {
+    const { name: nombre, ...dataForm}= formData;
+    const datosEnviar = { nombre, ...dataForm };
+
+    return this.http.post(`${base_url}/users/register`,datosEnviar)
+            .pipe(
+              catchError(this.messages.errorHandler)
+            );
+  }
+
+  create(formData: RegisterForm) {
+    const { name: nombre, ...dataForm}= formData;
+    const datosEnviar = { nombre, ...dataForm };
+
+    return this.http.post(`${base_url}/users/create`,datosEnviar)
+              .pipe(
+                catchError(this.messages.errorHandler)
+              );
+  }
+
+  isTokenExpirado() : boolean{
+    const token = this.token;
+    const payload = this.obtenerDatosToken(token) ;
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+
+    return !payload || payload.exp < nowInSeconds;
+  }
+
+  get nombreApellido(){
+    const usuarioString = localStorage.getItem('userPruebasoft');
+    if (!usuarioString) {
+      return 'Sin Nombre';
     }
-    return false;
+
+    const usuario = JSON.parse(usuarioString);
+    const fullname= `${usuario.nombre.split(' ')[0]} ${usuario.apellido.split(' ')[0]}`;
+
+    return fullname;
   }
 }
