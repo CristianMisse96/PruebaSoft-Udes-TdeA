@@ -27,10 +27,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError(e=> {
         if(e.status==401){
-          if(this.authService.isAuthenticathed){
+          if(this.authService.isAuthenticathed()){
             this.authService.logout();
+            this.toast.error(this.ACCESO_NO_AUTORIZADO, 'Error!!',{timeOut:duration});
           }
-          this.toast.error(this.ACCESO_NO_AUTORIZADO, 'Error!!',{timeOut:duration});
+          
           this.router.navigate(['/login']);
         }
 

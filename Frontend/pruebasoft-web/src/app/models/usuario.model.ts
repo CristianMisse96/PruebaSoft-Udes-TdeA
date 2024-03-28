@@ -11,6 +11,7 @@ export class Usuario{
         public email?: string,
         public roles?: RolEnum[],
         public password?: string,
+        public enabled?:boolean,
         ) {}
 
 }

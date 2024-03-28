@@ -23,6 +23,7 @@ import edu.co.udestdea.pruebasoft.web.app.auth.filter.JWTAuthenticationFilter;
 import edu.co.udestdea.pruebasoft.web.app.auth.filter.JWTValidationFilter;
 import edu.co.udestdea.pruebasoft.web.app.auth.service.JWTService;
 import static edu.co.udestdea.pruebasoft.web.app.util.SpringSecurityConstantes.HEADER_AUTHORIZATION;
+import static edu.co.udestdea.pruebasoft.web.app.util.SpringSecurityConstantes.ROLE_ADMIN;;
 
 /**
  * <p>
@@ -38,6 +39,7 @@ import static edu.co.udestdea.pruebasoft.web.app.util.SpringSecurityConstantes.H
 
 @Configuration
 public class SpringSecurityConfig {
+	
 	
 	private AuthenticationConfiguration authenticationConfiguration;
 	private JWTService jwtService;
@@ -56,10 +58,14 @@ public class SpringSecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
 		return http.authorizeHttpRequests((authz)-> authz
+				.requestMatchers(HttpMethod.GET,"/api/users/recurso/**").permitAll()
 				.requestMatchers(HttpMethod.POST,"/api/users/register").permitAll()
 				.requestMatchers(HttpMethod.GET,"/api/users/isemail/{email}").permitAll()
 				.requestMatchers(HttpMethod.GET,"/api/users/isusername/{username}").permitAll()
-				.requestMatchers(HttpMethod.POST,"/api/users/create").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.POST,"/api/users/create").hasRole(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.GET,"/api/users/all").hasRole(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.PUT,"/api/users/estado/**").hasRole(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.PUT,"/api/users/edit/admin/**").hasRole(ROLE_ADMIN)
 				.anyRequest().authenticated())
 				.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtService))
 				.addFilter(new JWTValidationFilter(authenticationManager(),jwtService))

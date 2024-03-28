@@ -1,12 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import { FormBuilder, FormControlOptions, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { RegisterForm } from 'src/app/interfaces/register-form-interface';
 import { RolEnum } from 'src/app/models/enums/RolEnum';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { ValidadoresService } from 'src/app/services/validadores.service';
 import { environment } from 'src/environments/environment.development';
+
 
 const duration= environment.toast_duration;
 
@@ -24,20 +27,24 @@ const duration= environment.toast_duration;
   ]
 })
 export class RegisterFormComponent implements OnInit{
-
+ 
   hide: boolean = true;
   hide2: boolean = true;
   registerForm: FormGroup;
   rolAdmin: RolEnum= RolEnum.ROLE_ADMIN;
   @Output() salida : EventEmitter<any>= new EventEmitter<any>();
-  @Input() modoEditar: boolean;
+  @Input() modoEditar: boolean=false;
+  @Input() modoEditarAdmin: boolean=false;
   @Input() usuario: Usuario | undefined; // Nuevo Input para recibir el usuario
-
+  @ViewChild('submitButton') submitButton: ElementRef;
+  
   constructor(private fb: FormBuilder,
               private router: Router,
               public authService: AuthService,
               private validadores: ValidadoresService,
-              private toast: ToastrService) {
+              private toast: ToastrService,
+              private userService: UserService,
+              ) {
 
    
   }
@@ -47,16 +54,26 @@ export class RegisterFormComponent implements OnInit{
   }
 
   cargarDataAlFormulario() {
-    if(this.modoEditar && this.usuario){
+    if((this.modoEditar || this.modoEditarAdmin) && this.usuario){
       this.registerForm.patchValue({
-        name: this.usuario.nombre,
+        name:this.usuario.nombre,
         apellido: this.usuario.apellido,
         email: this.usuario.email,
+        username : this.usuario.username,
         password: this.usuario.password,
+        password2:this.usuario.password,
         student: this.usuario.roles.includes(RolEnum.ROLE_STUDENT),
         teacher: this.usuario.roles.includes(RolEnum.ROLE_TEACHER),
         admin: this.usuario.roles.includes(RolEnum.ROLE_ADMIN),
       });
+      if(this.modoEditar){
+        const camposDeshabilitar = ['name', 'apellido', 'username'];
+
+        camposDeshabilitar.forEach(campo => {
+          this.registerForm.get(campo).disable();
+        });
+      }
+      
     }
   }
  
@@ -152,24 +169,56 @@ export class RegisterFormComponent implements OnInit{
   /**=== POSTEO DE LA INFORMACIÓN === */
   crearUsuario() {
     
-    
+    if (!this.modoEditar && this.modoEditarAdmin) {
+      this.adminUserEdit();
+      return;
+    }
     if(this.registerForm.invalid || this.registerForm.pending){
-        return Object.values(this.registerForm.controls).forEach(control=> {
+
+      return Object.values(this.registerForm.controls).forEach(control=> {
         control.markAllAsTouched();
       });
+
     }
    // guardar información según modo y rol
-    if(!this.modoEditar && !this.authService.hasRole(this.rolAdmin)){
+    if((!this.modoEditar && !this.modoEditarAdmin) && !this.authService.hasRole(this.rolAdmin)){
       this.registrarUsuario();
       
-    }else if (!this.modoEditar && this.authService.hasRole(this.rolAdmin)){
+    }else if ((!this.modoEditar && !this.modoEditarAdmin) && this.authService.hasRole(this.rolAdmin)){
       this.crearUsuarioAdmin();
+    }else if(this.modoEditar && !this.modoEditarAdmin){
+      this.editarProfile();
     }
-    
+  }
+
+  adminUserEdit() {
+    this.submitButton.nativeElement.disabled = true;
+    this.userService.adminUserEdit(this.registerForm.value, this.usuario.id).subscribe({
+      next: (resp:any)=>{
+        this.toast.success(resp.mensaje.detail,resp.mensaje.summary,{timeOut:duration});
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    });
+  }
+
+  editarProfile() {
+    const datosForm: RegisterForm = this.registerForm.value;
+    datosForm.apellido= this.usuario.apellido;
+    datosForm.name= this.usuario.nombre;
+    datosForm.username=this.usuario.username;
+
+    this.userService.editProfile(datosForm, this.usuario.id).subscribe({
+      next: (resp:any)=>{
+        this.toast.success(resp.mensaje.detail,resp.mensaje.summary,{timeOut:duration});
+        this.router.navigateByUrl(`/dashboard/users/profile/${this.usuario.id}`);
+      }
+    });
   }
 
   crearUsuarioAdmin() {
-    this.authService.create(this.registerForm.value).subscribe({
+    this.userService.create(this.registerForm.value).subscribe({
       next: (resp:any)=>{
         this.toast.success(resp.mensaje.detail,resp.mensaje.summary,{timeOut:duration});
         this.router.navigateByUrl('/dashboard/users/create');
@@ -179,7 +228,7 @@ export class RegisterFormComponent implements OnInit{
   }
 
   registrarUsuario() {
-    this.authService.register(this.registerForm.value).subscribe({
+    this.userService.register(this.registerForm.value).subscribe({
       next: (resp:any)=>{
         const mensaje= resp.mensaje.detail + ' Por favor inicie sesión con sus credenciales.';
         this.toast.success(mensaje,resp.mensaje.summary,{timeOut:duration});

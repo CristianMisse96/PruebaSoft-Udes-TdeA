@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="240px" height="238px" viewBox="0 0 240 238" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icono</title>
+    <defs>
+        <path d="M134.2711,98.2962514 L134.2711,96.1179728 L134.2711,23.9151782 C134.2711,21.5851343 133.338363,19.5907595 131.85601,18.030255 C130.482864,16.5858063 128.637084,15.5234491 126.596164,14.9306716 C125.384143,14.5771477 124.109463,14.382531 122.824041,14.382531 L53.7084399,14.382531 L53.7084399,9.87599391 C53.7084399,8.24228494 53.2519182,6.75677033 52.4838875,5.45515958 C50.5360614,2.16453047 46.5240409,0.0987367279 42.3759591,0.0987367279 L10.0309463,0.0987367279 C4.24654731,0.0987367279 0,4.10534102 0,9.87599391 L0,23.9151782 L0,84.2552816 L0,98.2962514 C0,104.065119 4.24654731,109.012668 10.0309463,109.012668 L122.824041,109.012668 C124.585678,109.012668 126.331202,108.55023 127.913811,107.748552 C131.530179,105.920227 134.2711,102.309998 134.2711,98.2962514 L134.2711,98.2962514 Z" id="path-1"></path>
+        <linearGradient x1="100%" y1="17.2967243%" x2="0%" y2="82.7032757%" id="linearGradient-3">
+            <stop stop-color="#004070" offset="0%"></stop>
+            <stop stop-color="#66A3C8" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-4" x="0" y="0" width="134.842105" height="109.052632"></rect>
+        <filter x="-9.6%" y="-10.1%" width="119.3%" height="123.8%" filterUnits="objectBoundingBox" id="filter-5">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.2   0 0 0 0 0.2   0 0 0 0 0.2  0 0 0 0.135216346 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Doble-intervención" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Disponibilidad-del-sistema---Solicitudes---Vacio" transform="translate(-1020.000000, -475.000000)">
+            <g id="Solicitudes" transform="translate(400.000000, 290.000000)">
+                <g id="Sin-solicitudes" transform="translate(554.000000, 185.000000)">
+                    <g id="Icono" transform="translate(66.153846, 0.000000)">
+                        <circle id="Oval" fill="#F0F0F0" cx="119.846154" cy="119" r="119"></circle>
+                        <g id="File" transform="translate(49.846154, 64.000000)">
+                            <path d="M130.128031,5.45515958 C135.477052,5.45515958 139.290165,9.44739255 139.835576,14.6103533 L139.865371,14.616688 L139.877903,91.1579252 C139.664859,100.085297 136.195294,105.766676 128.178414,107.727127 C131.792992,105.898801 134.535703,102.309998 134.535703,98.2962514 L134.535703,98.2962514 L134.535703,96.5143481 L123.512701,14.3901596 L123.088645,14.382531 L53.9730435,14.382531 L53.9730435,9.87599391 C53.9730435,8.24228494 53.5165217,6.75677033 52.7467008,5.45515958 L52.7467008,5.45515958 Z" id="Combined-Shape" fill="#031726"></path>
+                            <g id="Color/Degradado" transform="translate(0.264066, 0.000000)">
+                                <mask id="mask-2" fill="white">
+                                    <use xlink:href="#path-1"></use>
+                                </mask>
+                                <use id="Mask" fill="#F8F7F7" xlink:href="#path-1"></use>
+                                <g id="Group" mask="url(#mask-2)">
+                                    <g transform="translate(-0.264066, 0.000000)" id="004070---">
+                                        <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                                        <use fill="url(#linearGradient-3)" fill-rule="evenodd" xlink:href="#path-4"></use>
+                                    </g>
+                                </g>
+                            </g>
+                            <rect id="Rectangle" fill="#D8D8D8" style="mix-blend-mode: overlay;" x="8.10526316" y="5.15789474" width="36.8421053" height="8.84210526" rx="4.42105263"></rect>
+                            <path d="M120.621621,14.3830314 L123.088107,14.382531 C124.373529,14.382531 125.64821,14.5771477 126.86023,14.9306716 C128.901151,15.5234491 130.746931,16.5858063 132.120077,18.030255 C133.60243,19.5907595 134.535166,21.5851343 134.535166,23.9151782 L134.535166,23.9151782 L134.535166,98.2962514 C134.535166,102.309998 131.794246,105.920227 128.177877,107.748552 C126.595269,108.55023 124.849744,109.012668 123.088107,109.012668 L123.088107,109.012668 L63.1207085,109.015794 C95.9330394,89.6406576 118.481846,54.716417 120.621621,14.3830314 Z" id="Combined-Shape" fill="#000000" style="mix-blend-mode: overlay;" opacity="0.2"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

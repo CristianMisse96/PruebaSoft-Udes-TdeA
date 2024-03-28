@@ -1,0 +1,46 @@
+
+<div class="row mt-5">
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">Mi perfil de usuario</h4>
+                <h6 class="card-subtitle">Ajustes</h6>
+                <app-register-form *ngIf="usuario" [modoEditar]="true" [usuario]="usuario"></app-register-form>
+            </div>
+        </div>
+    </div>
+    <!--####IMAGEN####-->
+    <div class="col-md-6" *ngIf="usuario">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">Avatar</h4>
+                <h6 class="card-subtitle">Imagen del usuario</h6>
+
+              <div class="text-center">
+                    <img *ngIf="!imgTemp" [src]="authService.img | imagen: 'usuario'" alt="profile" style="height: 200px; width: 200px; margin-bottom: 50px;">
+                    <img *ngIf="imgTemp" [src]="imgTemp" alt="profile" style="height: 200px; width: 200px; margin-bottom: 50px;">
+                </div>
+                
+
+                 <input type="file" (change)="cambiarImagen($event)">
+                <br><br>
+                
+                <button type="button" 
+                        class="btn btn-success waves-effect waves-light m-r-10"
+                        [disabled]="!imagenSubir"
+                        (click)="subirImagen()">
+                        <i class="fa fa-save"></i>    
+                        Cambiar imagen
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<h4 class="card-tittle">
+    <a (click)="onRegresar()" class="btn btn-xs">&laquo; Volver</a>
+</h4>
+
+<app-footer></app-footer>

@@ -64,8 +64,8 @@ export class LoginComponent implements OnInit{
             'Login!!!', { timeOut: duration });
             
         },
-        error: (err) => {
-          if (err.error.error === 'Bad credentials') {
+        error: (err) => {console.log(err);
+          if (err.error.error === 'Bad credentials' || err.error.error==='User is disabled') {
             this.toast.error(err.error.message, 'Error', { timeOut: duration });
           }else if(err.status ===0){
               this.toast.error(this.MENSAJE_SIN_CONEXION, this.TITULO_SIN_CONEXION, { timeOut: duration });
