@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { RolEnum } from 'src/app/models/enums/RolEnum';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class HeaderComponent {
 
+  rolAdmin: RolEnum= RolEnum.ROLE_ADMIN;
   constructor(public authService : AuthService,
               private toast: ToastrService,
               private router: Router) {

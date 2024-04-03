@@ -2,41 +2,21 @@ import { Injectable } from '@angular/core';
 import { LoginForm } from '../interfaces/login-form-interface';
 import { environment } from 'src/environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
 import { RolEnum } from '../models/enums/RolEnum';
-import { RegisterForm } from '../interfaces/register-form-interface';
-import { MessagesService } from './messages.service';
 
-const base_url = environment.base_url;
+
+const base_url = environment.base_url
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  
   usuario: Usuario;
  
-  constructor(private http: HttpClient,
-              private messages : MessagesService) { }
-
-  public get _usuario(){
-
-    if(this.usuario!=null){
-      return this.usuario
-    }else if(this.usuario==null && this.obtenerDatosToken(this.token)!=null){
-      let payload= this.obtenerDatosToken(this.token);
-      this.usuario= new Usuario(payload.username,payload.nombre,payload.apellido,payload.foto,payload.id,payload.email,payload.authorities);
-      return this.usuario;
-    }
-
-    return new Usuario('','','');
-  }
-
-  get token() {
-    return localStorage.getItem('tokenPruebaSoft');
-  }
-
+  constructor(private http: HttpClient) { }
 
   isAuthenticathed(): boolean {
     let payload = this.obtenerDatosToken(this.token);
@@ -73,13 +53,11 @@ export class AuthService {
 
   guardarLocalStorage(token:string, usuario: Usuario){
     localStorage.setItem('tokenPruebaSoft', token);
-    localStorage.setItem('userPruebasoft',JSON.stringify(usuario));
+    localStorage.setItem('userPruebaSoft',JSON.stringify(usuario));
   }
 
   hasRole(role : RolEnum) : boolean{
-    
     return this._usuario.roles?.includes(role) || false;
-
   }
 
   logout(){
@@ -88,25 +66,6 @@ export class AuthService {
     localStorage.removeItem('userPruebaSoft');
   }
 
-  register(formData: RegisterForm) {
-    const { name: nombre, ...dataForm}= formData;
-    const datosEnviar = { nombre, ...dataForm };
-
-    return this.http.post(`${base_url}/users/register`,datosEnviar)
-            .pipe(
-              catchError(this.messages.errorHandler)
-            );
-  }
-
-  create(formData: RegisterForm) {
-    const { name: nombre, ...dataForm}= formData;
-    const datosEnviar = { nombre, ...dataForm };
-
-    return this.http.post(`${base_url}/users/create`,datosEnviar)
-              .pipe(
-                catchError(this.messages.errorHandler)
-              );
-  }
 
   isTokenExpirado() : boolean{
     const token = this.token;
@@ -117,7 +76,7 @@ export class AuthService {
   }
 
   get nombreApellido(){
-    const usuarioString = localStorage.getItem('userPruebasoft');
+    const usuarioString = localStorage.getItem('userPruebaSoft');
     if (!usuarioString) {
       return 'Sin Nombre';
     }
@@ -127,4 +86,32 @@ export class AuthService {
 
     return fullname;
   }
+
+  get img(){
+    const usuarioString = localStorage.getItem('userPruebaSoft');
+    if (!usuarioString) {
+      return 'no-image';
+    }
+
+    const usuario = JSON.parse(usuarioString);
+    return usuario.img;
+  }
+
+  public get _usuario(){
+
+    if(this.usuario!=null){
+      return this.usuario
+    }else if(this.usuario==null && this.obtenerDatosToken(this.token)!=null){
+      let payload= this.obtenerDatosToken(this.token);
+      this.usuario= new Usuario(payload.username,payload.nombre,payload.apellido,payload.foto,payload.id,payload.email,payload.authorities);
+      return this.usuario;
+    }
+
+    return new Usuario('','','');
+  }
+
+  get token() {
+    return localStorage.getItem('tokenPruebaSoft');
+  }
+
 }

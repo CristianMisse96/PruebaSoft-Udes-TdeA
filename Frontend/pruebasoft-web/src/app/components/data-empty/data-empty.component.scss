@@ -1,0 +1,33 @@
+
+#data-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin: 30px auto;
+    .empty {
+        &__icon {
+            // width: 238px;
+            // height: 238px;
+            opacity: 20%;
+        }
+        &__title {
+            font-size: 2rem !important;;
+            font-weight: 400;
+            color: #66A3C8;
+            text-align: center;
+            // margin: 2rem 0 0;
+        }
+        &__content {
+            color: #333333;
+        }
+    }
+}
+
+.card-content
+    {
+        min-height: 1px;
+    }

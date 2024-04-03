@@ -12,4 +12,5 @@ public class SpringSecurityConstantes {
 	public static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 	public static final String CONTENT_TYPE = "application/json";
 	public static final String MESSAGE = "message";
+	public static final String ROLE_ADMIN = "ADMIN";
 }

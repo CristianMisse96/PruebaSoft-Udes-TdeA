@@ -4,14 +4,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { TooglePasswordComponent } from './toogle-password/toogle-password.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AuthModule } from '../auth/auth.module';
-
-
+import { DataEmptyComponent } from './data-empty/data-empty.component';
+import { ModalImagenComponent } from './modal-imagen/modal-imagen.component';
 
 @NgModule({
   declarations: [
     TooglePasswordComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    DataEmptyComponent,
+    ModalImagenComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +21,9 @@ import { AuthModule } from '../auth/auth.module';
   ],
   exports: [
     TooglePasswordComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    DataEmptyComponent,
+    ModalImagenComponent
   ]
 })
 export class ComponentsModule { }

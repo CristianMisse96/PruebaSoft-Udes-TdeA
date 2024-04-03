@@ -60,6 +60,9 @@ public class Usuario {
 	 @Column(name = "FOTO", length = 200)
 	 private String foto;
 	 
+	 @Column(name = "ENABLED")
+	 private Boolean enabled;
+	 
 	 @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	 @JoinTable(
 			 name = "users_roles",

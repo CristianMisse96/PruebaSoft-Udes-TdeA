@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -102,7 +103,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			AuthenticationException failed) throws IOException, ServletException {
 		
 		Map<String, String> body= new HashMap<>();
-		body.put(MESSAGE,"username/correo o password incorrectos");
+		if (failed instanceof DisabledException) {
+	        body.put(MESSAGE, "Tu cuenta está deshabilitada. Por favor, contacta al administrador.");
+	    } else {
+	        body.put(MESSAGE, "username/correo o password incorrectos");
+	        
+	    }
 		body.put("error", failed.getMessage());
 		
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));

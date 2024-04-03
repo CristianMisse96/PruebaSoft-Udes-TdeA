@@ -1,4 +1,4 @@
-<header>
+<header class="app-header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
@@ -10,10 +10,10 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a class="nav-link" aria-current="page" [routerLink]="['/']">Home</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
+              <li class="nav-item" *ngIf="authService.hasRole(rolAdmin)">
+                <a class="nav-link" [routerLink]="['./users']" routerLinkActive="active">Usuarios</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Pricing</a>
@@ -28,20 +28,20 @@
                 <li *ngIf="authService.isAuthenticathed()" class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                    
-                    <img src="../../../assets/images/github.png" alt="user" class="profile-pic" />
+                    <img [src]="authService.img | imagen: 'usuario'" alt="user" class="profile-pic" />
                   </a>
 
                   <ul class="dropdown-user dropdown-menu dropdown-menu-dark dropdown-menu-lg-end">
                     <li>
                         <div class="dw-user-box">
-                            <div class="u-img"><img src="../../../assets/images/github.png" alt="user"></div>
+                            <div class="u-img"><img [src]="authService.img| imagen: 'usuario'" alt="user"></div>
                             <div class="u-text">
                                 <h4>{{authService.nombreApellido}}</h4>
-                                <p class="text-muted">{{authService._usuario.username | slice:0:22}} {{(authService._usuario.username.length>22)?'...':''}}</p><a href="pages-profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                <p class="text-muted">{{authService._usuario.username | slice:0:22}} {{(authService._usuario.username.length>22)?'...':''}}</p><a [routerLink]="['./users/profile', authService._usuario.id]" routerLinkActive="router-link-active"  class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
                         </div>
                     </li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#"><i class="ti-user"></i>&nbsp;my profile</a></li>
+                    <li><a class="dropdown-item" [routerLink]="['./users/profile', authService._usuario.id]" routerLinkActive="router-link-active"><i class="ti-user"></i>&nbsp;my profile</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a (click)="logout()" class="dropdown-item cursor"><i class="fa fa-power-off"></i> Salir</a></li>
                   </ul>

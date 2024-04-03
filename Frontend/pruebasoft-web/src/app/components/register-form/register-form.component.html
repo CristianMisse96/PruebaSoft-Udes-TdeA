@@ -1,11 +1,11 @@
-<h4>Formulario <small> Registro </small></h4>
-<hr>
-
+<h4 *ngIf="!modoEditar && !modoEditarAdmin">Formulario <small> Registro </small></h4>
+<hr *ngIf="!modoEditar && !modoEditarAdmin">
+<h4 *ngIf="modoEditarAdmin">Editar <small> usuario </small></h4>
   <div class="container">
       <form autocomplete="off" [formGroup]="registerForm" (ngSubmit)="crearUsuario()">
         <!--===NOMBRE===-->
         <div class="mb-0 col-sm-6">
-            <label class="col-2 col-form-label">Nombre<small class="text-danger">*</small></label>
+            <label class="col-6 col-form-label">Nombre<small class="text-danger">*</small></label>
             <div class="col">
       
               <input class="form-control form-control-sm"
@@ -21,7 +21,7 @@
 
           <!--===APELLIDO===-->
           <div class="mb-0 col-sm-6">
-            <label class="col-2 col-form-label">Apellido<small class="text-danger">*</small></label>
+            <label class="col-6 col-form-label">Apellido<small class="text-danger">*</small></label>
             <div class="col">
       
               <input class="form-control form-control-sm"
@@ -37,7 +37,7 @@
 
           <!--===USERNAME===-->
           <div class="mb-0 col-sm-6">
-            <label class="col-3 col-form-label">Nombre de usuario<small class="text-danger">*</small></label>
+            <label class="col-6 col-form-label">Nombre de usuario<small class="text-danger">*</small></label>
             <div class="col">
       
               <input class="form-control form-control-sm"
@@ -55,7 +55,7 @@
 
           <!--===EMAIL===-->
           <div class="mb-0 col-sm-6">
-            <label class="col-3 col-form-label">Correo eléctronico<small class="text-danger">*</small></label>
+            <label class="col-6 col-form-label">Correo eléctronico<small class="text-danger">*</small></label>
             <div class="col">
       
               <input class="form-control form-control-sm"
@@ -72,7 +72,7 @@
           </div>
 
           <!--===PASSWORD===-->
-          <div class="mb-0 col-sm-6">
+          <div class="mb-0 col-sm-6" *ngIf="!modoEditar && !modoEditarAdmin">
             <label class="col-2 col-form-label">Contraseña<small class="text-danger">*</small></label>
             <div class="col" style="position: relative;">
       
@@ -92,7 +92,7 @@
           </div>
 
           <!--===REPETIR PASSWORD===-->
-          <div class="mb-2 col-sm-6">
+          <div class="mb-2 col-sm-6" *ngIf="!modoEditar && !modoEditarAdmin">
             <label class="col-3 col-form-label">Confirmar contraseña<small class="text-danger">*</small></label>
             <div class="col" style="position: relative;">
       
@@ -110,9 +110,9 @@
           </div>
 
           <!--===ASIGNAR ROLES===-->
-          <div class="mb-2 col-sm-6" *ngIf="authService.hasRole(rolAdmin)">
-            <label class="col-8 col-form-label">Roles<small class="text-danger"> (si no selecciona un rol por defecto se asignara ESTUDIANTE)</small></label>
-            <div class="col">
+          <div class="mb-2 col-sm-6" *ngIf="(authService.hasRole(rolAdmin) || modoEditarAdmin) && !modoEditar ">
+            <label class="col-12 col-form-label">Roles<small class="text-danger"> (si no selecciona un rol por defecto se asignara ESTUDIANTE)</small></label>
+            <div class="col-12">
       
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="student" formControlName="student">
@@ -131,11 +131,11 @@
           </div>
 
           <!--===BOTÓN SUBMIT===-->
-          <div class="col-sm-6">
+          <div class="col-sm-6 mt-3">
            
             <div class="text-end">
              
-              <button type="submit"  class="btn btn-success btn-lg">
+              <button #submitButton type="submit"  class="btn btn-success btn-lg">
                 <i class="fa fa-save me-1"></i>
                 Guardar
               </button>
@@ -143,4 +143,5 @@
           </div>
   </form>
 </div>
+
 

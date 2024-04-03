@@ -8,15 +8,18 @@ import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegisterAdminComponent } from './register-admin/register-admin.component';
 import { ComponentsModule } from "../components/components.module";
-
-
-
+import { UsersProfileComponent } from './users/users-profile/users-profile.component';
+import { PipesModule } from "../pipes/pipes.module";
+import { PrimengModule } from '../primeng.module';
+import { UsersListComponent } from './users/users-list/users-list.component';
 
 @NgModule({
     declarations: [
         PagesComponent,
         DashboardComponent,
         RegisterAdminComponent,
+        UsersProfileComponent,
+        UsersListComponent
     ],
     exports: [
         PagesComponent,
@@ -27,7 +30,9 @@ import { ComponentsModule } from "../components/components.module";
         CommonModule,
         SharedModule,
         AppRoutingModule,
-        ComponentsModule
+        ComponentsModule,
+        PipesModule,
+        PrimengModule
     ]
 })
 export class PagesModule { }
