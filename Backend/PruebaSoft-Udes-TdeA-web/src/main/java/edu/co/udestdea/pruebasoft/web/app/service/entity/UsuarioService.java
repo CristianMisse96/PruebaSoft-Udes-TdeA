@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.co.udestdea.pruebasoft.web.app.exception.PruebaSoftException;
 import edu.co.udestdea.pruebasoft.web.app.models.dto.UsuarioDTO;
-import jakarta.validation.Valid;
 
 public interface UsuarioService {
 	

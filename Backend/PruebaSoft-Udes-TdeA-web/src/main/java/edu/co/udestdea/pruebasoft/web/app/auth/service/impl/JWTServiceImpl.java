@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

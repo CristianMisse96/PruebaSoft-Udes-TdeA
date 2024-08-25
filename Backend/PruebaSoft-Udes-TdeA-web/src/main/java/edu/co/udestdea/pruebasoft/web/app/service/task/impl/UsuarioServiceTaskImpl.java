@@ -1,6 +1,5 @@
 package edu.co.udestdea.pruebasoft.web.app.service.task.impl;
 
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.UUID;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,6 @@ import edu.co.udestdea.pruebasoft.web.app.service.entity.UsuarioService;
 import edu.co.udestdea.pruebasoft.web.app.service.task.UsuarioServiceTask;
 import edu.co.udestdea.pruebasoft.web.app.util.ExcepcionUtil;
 import edu.co.udestdea.pruebasoft.web.app.util.Messages;
-import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 
 /**
